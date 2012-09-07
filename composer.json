@@ -1,8 +1,8 @@
 {
+    "name": "cameronmurphy/php-resque-bundle",
     "require": {
         "chrisboulton/php-resque": "master-dev"
-    }
-    
+    },
     "repositories": {
         "chrisboulton/php-resque": {
             "package": {
@@ -12,12 +12,12 @@
                     "php": ">=5.3.2"
                 },
                 "dist": {
-                    "url":       "https://github.com/chrisboulton/php-resque/zipball/master",
-                    "type":      "zip"
+                    "url": "https://github.com/chrisboulton/php-resque/zipball/master",
+                    "type": "zip"
                 },
                 "source": {
-                    "url":       "git://github.com/chrisboulton/php-resque.git",
-                    "type":      "git",
+                    "url": "git://github.com/chrisboulton/php-resque.git",
+                    "type": "git",
                     "reference": "master"
                 },
                 "autoload": {
