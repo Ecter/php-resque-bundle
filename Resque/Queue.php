@@ -1,25 +1,31 @@
 <?php
 namespace PHPResqueBundle\Resque;
 
-class Queue {
+use Resque;
+use Resque_Redis;
 
-    private $backend = '';
+class Queue
+{
 
-    public function __construct($backend) {
-        $this->backend = $backend;
+    private static $backend = '';
+
+    public function __construct($backend)
+    {
+        static::$backend = $backend;
     }
 
-    public static function add($job_name, $queue_name, $args = array()) {
-        \Resque::setBackend($this->backend);
+    public static function add($jobName, $queueName, $args = array())
+    {
+        Resque::setBackend(static::$backend);
 
-        if (strpos($queue_name, ':') !== false) {
-            list($namespace, $queue_name) = explode(':', $queue_name);
-            \Resque_Redis::prefix($namespace);
+        if (strpos($queueName, ':') !== false) {
+            list($namespace, $queueName) = explode(':', $queueName);
+            Resque_Redis::prefix($namespace);
         }
 
         try {
-            $class = new \ReflectionClass($job_name);
-            $jobId = \Resque::enqueue($queue_name, $class->getName(), $args, true);
+            $class = new \ReflectionClass($jobName);
+            $jobId = Resque::enqueue($queueName, $class->getName(), $args, true);
 
             return $jobId;
         } catch (\ReflectionException $rfe) {

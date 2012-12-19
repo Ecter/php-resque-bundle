@@ -1,6 +1,10 @@
 <?php
 namespace PHPResqueBundle\Resque;
 
+use Resque;
+use Resque_Redis;
+use Resque_Job_Status;
+
 class Status {
 
     private $backend = '';
@@ -9,46 +13,46 @@ class Status {
         $this->backend = $backend;
     }
 
-    public static function check($job_id, $namespace) {
-        \Resque::setBackend($this->backend);
-        
+    public static function check($jobId, $namespace) {
+        Resque::setBackend($this->backend);
+
         if (!empty($namespace)) {
-            \Resque_Redis::prefix($namespace);
+            Resque_Redis::prefix($namespace);
         }
 
-        $status = new \Resque_Job_Status($job_id);
+        $status = new Resque_Job_Status($jobId);
         if (!$status->isTracking()) {
             die("Resque is not tracking the status of this job.\n");
         }
 
         $class = new \ReflectionObject($status);
 
-        foreach ($class->getConstants() as $constant_name => $constant_value) {
-            if ($constant_value == $status->get()) {
+        foreach ($class->getConstants() as $constantName => $constantValue) {
+            if ($constantValue == $status->get()) {
                 break;
             }
         }
 
-        return 'Job status in queue is ' . $status->get() . " [$constant_name]";
+        return 'Job status in queue is ' . $status->get() . " [$constantName]";
     }
 
-    public static function update($status, $to_job_id, $namespace) {
-        \Resque::setBackend($this->backend);
+    public static function update($status, $toJobId, $namespace) {
+        Resque::setBackend($this->backend);
 
         if (!empty($namespace)) {
-            \Resque_Redis::prefix($namespace);
+            Resque_Redis::prefix($namespace);
         }
 
-        $job = new \Resque_Job_Status($to_job_id);
+        $job = new Resque_Job_Status($toJobId);
 
         if (!$job->get()) {
-            throw new \RuntimeException("Job {$to_job_id} was not found");
+            throw new \RuntimeException("Job {$toJobId} was not found");
         }
 
         $class = new \ReflectionObject($job);
 
-        foreach ($class->getConstants() as $constant_value) {
-            if ($constant_value == $status) {
+        foreach ($class->getConstants() as $constantValue) {
+            if ($constantValue == $status) {
                 $job->update($status);
                 return true;
             }
