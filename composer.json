@@ -4,12 +4,6 @@
     "require": {
         "chrisboulton/php-resque": "dev-master"
     },
-    "repositories": [
-        {
-            "type": "git",
-            "url": "git://github.com/chrisboulton/php-resque.git"
-        }
-    ],
     "autoload": {
         "psr-0": { "PHPResqueBundle": "" }
     },
