@@ -29,11 +29,9 @@ class Status {
 
         foreach ($class->getConstants() as $constantName => $constantValue) {
             if ($constantValue == $status->get()) {
-                break;
+                return 'Job status in queue is ' . $status->get() . " [$constantName]";
             }
         }
-
-        return 'Job status in queue is ' . $status->get() . " [$constantName]";
     }
 
     public static function update($status, $toJobId, $namespace) {
