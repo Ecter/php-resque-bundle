@@ -13,6 +13,7 @@
     <services>
         <service id="phpresque.control" class="%phpresque.control.class%">
             <argument>%phpresque.backend%</argument>
+            <argument type="service" id="logger" />
         </service>
         <service id="phpresque.queue" class="%phpresque.queue.class%">
             <argument>%phpresque.backend%</argument>

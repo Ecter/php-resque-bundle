@@ -1,5 +1,8 @@
 <?php
+
 namespace PHPResqueBundle;
+
+use Psr\Log\LoggerInterface;
 
 class PHPResque
 {
@@ -9,8 +12,14 @@ class PHPResque
     private $fork_count = 1;
     private $backend = '';
 
-    public function __construct($backend) {
+    /**
+     * @var LoggerInterface logger
+     */
+    private $logger;
+
+    public function __construct($backend, LoggerInterface $logger) {
         $this->backend = $backend;
+        $this->logger = $logger;
     }
 
     public function defineQueue($name) {
@@ -44,20 +53,9 @@ class PHPResque
         return $this->fork_count;
     }
 
-    private function loglevel() {
-        switch ($this->logging) {
-            case 'verbose' :
-                return \Resque_Worker::LOG_VERBOSE;
-            case 'normal' :
-                return \Resque_Worker::LOG_NONE;
-            default :
-                return \Resque_Worker::LOG_NONE;
-        }
-    }
-
     private function work() {
         $worker = new \Resque_Worker(explode(',', $this->queue));
-        $worker->logLevel = $this->loglevel();
+        $worker->setLogger($this->logger);
         $worker->work($this->checker_interval);
         fwrite(STDOUT, '*** Starting worker ' . $worker . "\n");
     }
