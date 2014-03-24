@@ -10,7 +10,8 @@ class Event
     {
         if (!static::isCallableEvent($method)) {
             if (strpos($method, 'Stop') !== false) {
-                return static::stopEvent($method, $args);
+                static::stopEvent($method, $args);
+                return;
             }
 
             throw new PHPResqueEventException("The {$method} does not exists");
