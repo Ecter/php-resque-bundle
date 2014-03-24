@@ -1,4 +1,5 @@
 <?php
+
 namespace PHPResqueBundle\Resque;
 
 use Resque;
@@ -6,7 +7,6 @@ use Resque_Redis;
 
 class Queue
 {
-
     private static $backend = '';
 
     public function __construct($backend)

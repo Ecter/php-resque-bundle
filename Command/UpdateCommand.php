@@ -1,4 +1,5 @@
 <?php
+
 namespace PHPResqueBundle\Command;
 
 use PHPResqueBundle\Resque\Status;

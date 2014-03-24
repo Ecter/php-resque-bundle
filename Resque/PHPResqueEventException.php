@@ -1,6 +1,8 @@
 <?php
+
 namespace PHPResqueBundle\Resque;
 
-class PHPResqueEventException extends \RuntimeException {
+class PHPResqueEventException extends \RuntimeException
+{
 
 }

@@ -1,12 +1,13 @@
 <?php
+
 namespace PHPResqueBundle\Resque;
 
 use Resque;
 use Resque_Redis;
 use Resque_Job_Status;
 
-class Status {
-
+class Status
+{
     private static $backend = '';
 
     public function __construct($backend) {
@@ -21,6 +22,7 @@ class Status {
         }
 
         $status = new Resque_Job_Status($jobId);
+
         if (!$status->isTracking()) {
             die("Resque is not tracking the status of this job.\n");
         }

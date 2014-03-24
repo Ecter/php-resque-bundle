@@ -1,11 +1,11 @@
 <?php
+
 namespace PHPResqueBundle\Resque;
 
 use Resque_Event;
 
 class Event
 {
-
     public static function __callStatic($method, $args)
     {
         if (!static::isCallableEvent($method)) {
