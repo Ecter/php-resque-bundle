@@ -7,14 +7,14 @@ use Resque_Job_Status;
 
 class Status {
 
-    private $backend = '';
+    private static $backend = '';
 
     public function __construct($backend) {
-        $this->backend = $backend;
+        static::$backend = $backend;
     }
 
     public static function check($jobId, $namespace) {
-        Resque::setBackend($this->backend);
+        Resque::setBackend(static::$backend);
 
         if (!empty($namespace)) {
             Resque_Redis::prefix($namespace);
@@ -37,7 +37,7 @@ class Status {
     }
 
     public static function update($status, $toJobId, $namespace) {
-        Resque::setBackend($this->backend);
+        Resque::setBackend(static::$backend);
 
         if (!empty($namespace)) {
             Resque_Redis::prefix($namespace);
