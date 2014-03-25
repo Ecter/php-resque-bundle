@@ -2,7 +2,7 @@
     "name": "catch-of-the-day/php-resque-bundle",
     "type": "symfony-bundle",
     "require": {
-        "chrisboulton/php-resque": "dev-master"
+        "catch-of-the-day/php-resque": "dev-master"
     },
     "autoload": {
         "psr-0": { "PHPResqueBundle": "" }
