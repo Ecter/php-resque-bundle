@@ -66,8 +66,8 @@ class PHPResque
         $worker = new \Resque_Worker(explode(',', $this->queue));
         $worker->setLogger($this->logger);
         $worker->setStayAlive($this->stayAlive);
-        $worker->work($this->checker_interval);
         fwrite(STDOUT, '*** Starting worker ' . $worker . "\n");
+        $worker->work($this->checker_interval);
     }
 
     public function daemon() {
