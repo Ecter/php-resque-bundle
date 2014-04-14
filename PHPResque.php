@@ -11,6 +11,7 @@ class PHPResque
     private $checker_interval = 5;
     private $fork_count = 1;
     private $backend = '';
+    private $stayAlive = false;
 
     /**
      * @var LoggerInterface logger
@@ -32,6 +33,14 @@ class PHPResque
 
     public function setInterval($interval) {
         $this->checker_interval = (int)$interval;
+    }
+
+    /**
+     * @param boolean $stayAlive
+     */
+    public function setStayAlive($stayAlive)
+    {
+        $this->stayAlive = $stayAlive;
     }
 
     public function forkInstances($count) {
@@ -56,6 +65,7 @@ class PHPResque
     private function work() {
         $worker = new \Resque_Worker(explode(',', $this->queue));
         $worker->setLogger($this->logger);
+        $worker->setStayAlive($this->stayAlive);
         $worker->work($this->checker_interval);
         fwrite(STDOUT, '*** Starting worker ' . $worker . "\n");
     }
