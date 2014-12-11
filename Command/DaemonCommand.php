@@ -17,6 +17,7 @@ class DaemonCommand extends ContainerAwareCommand
              ->addOption('log', 'l', InputOption::VALUE_OPTIONAL, 'Verbose mode [verbose|normal|none]')
              ->addOption('interval', 'i', InputOption::VALUE_OPTIONAL, 'Daemon check interval (in seconds)', 5)
              ->addOption('forkCount', 'f', InputOption::VALUE_OPTIONAL, 'Fork count instances', 1)
+             ->addOption('non-blocking', 'b', InputOption::VALUE_NONE, 'Don\'t block when popping jobs from the queue')
              ->addOption('stay-alive', 'a', InputOption::VALUE_NONE, 'Don\'t kill the daemon after successfully processing a job')
              ->setHelp(<<<EOF
 Worker will run all jobs enqueue by PHPResqueBundle\Resque\Queue command line and defined by Queue class.
@@ -30,6 +31,7 @@ EOF
         $phpresque->defineQueue($input->getArgument('queue'));
         $phpresque->verbose($input->getOption('log'));
         $phpresque->setInterval($input->getOption('interval'));
+        $phpresque->setBlocking(!$input->getOption('non-blocking'));
         $phpresque->setStayAlive($input->getOption('stay-alive'));
         $phpresque->forkInstances($input->getOption('forkCount'));
         $phpresque->daemon();

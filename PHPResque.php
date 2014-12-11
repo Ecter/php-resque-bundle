@@ -12,6 +12,7 @@ class PHPResque
     private $fork_count = 1;
     private $backend = '';
     private $stayAlive = false;
+    private $blocking = true;
 
     /**
      * @var LoggerInterface logger
@@ -33,6 +34,14 @@ class PHPResque
 
     public function setInterval($interval) {
         $this->checker_interval = (int)$interval;
+    }
+
+    /**
+     * @param boolean $blocking
+     */
+    public function setBlocking($blocking)
+    {
+        $this->blocking = $blocking;
     }
 
     /**
@@ -67,7 +76,7 @@ class PHPResque
         $worker->setLogger($this->logger);
         $worker->setStayAlive($this->stayAlive);
         fwrite(STDOUT, '*** Starting worker ' . $worker . "\n");
-        $worker->work($this->checker_interval);
+        $worker->work($this->checker_interval, $this->blocking);
     }
 
     public function daemon() {
