@@ -1,11 +1,10 @@
-<?php
-
-namespace PHPResqueBundle;
+<?php namespace PHPResqueBundle;
 
 use Psr\Log\LoggerInterface;
 
 class PHPResque
 {
+
     private $queue = '*';
     private $logging = 'normal';
     private $checker_interval = 5;
@@ -19,21 +18,25 @@ class PHPResque
      */
     private $logger;
 
-    public function __construct($backend, LoggerInterface $logger) {
+    public function __construct($backend, LoggerInterface $logger)
+    {
         $this->backend = $backend;
         $this->logger = $logger;
     }
 
-    public function defineQueue($name) {
+    public function defineQueue($name)
+    {
         $this->queue = $name;
     }
 
-    public function verbose($mode) {
+    public function verbose($mode)
+    {
         $this->logging = $mode;
     }
 
-    public function setInterval($interval) {
-        $this->checker_interval = (int)$interval;
+    public function setInterval($interval)
+    {
+        $this->checker_interval = (int) $interval;
     }
 
     /**
@@ -52,7 +55,8 @@ class PHPResque
         $this->stayAlive = $stayAlive;
     }
 
-    public function forkInstances($count) {
+    public function forkInstances($count)
+    {
         settype($count, 'int');
 
         if ($count > 1) {
@@ -67,19 +71,26 @@ class PHPResque
         }
     }
 
-    public function getForkInstances() {
+    public function getForkInstances()
+    {
         return $this->fork_count;
     }
 
-    private function work() {
+    private function work()
+    {
         $worker = new \Resque_Worker(explode(',', $this->queue));
-        $worker->setLogger($this->logger);
-        $worker->setStayAlive($this->stayAlive);
+        if ($this->logger instanceof LoggerInterface) {
+            $worker->setLogger($this->logger);
+        }
+        if (method_exists($worker, 'setStayAlive')) {
+            $worker->setStayAlive($this->stayAlive);
+        }
         fwrite(STDOUT, '*** Starting worker ' . $worker . "\n");
         $worker->work($this->checker_interval, $this->blocking);
     }
 
-    public function daemon() {
+    public function daemon()
+    {
         \Resque::setBackend($this->backend);
 
         if (strpos($this->queue, ':') !== false) {
